@@ -50,13 +50,12 @@ export default function NewVideoScreen() {
         console.log("Seçilen video:", result.assets[0].uri);
 
         setProcessingStep("Video formatı kontrol ediliyor");
-        // Video formatını kontrol et ve gerekirse dönüştür
         const compatibleUri = await ensureCompatibleFormat(
           result.assets[0].uri
         );
 
         setSelectedVideo(compatibleUri);
-        setTrimmedVideo(null); // Yeni video seçildiğinde kırpılmış videoyu sıfırla
+        setTrimmedVideo(null);
 
         console.log("İşlenmiş video URI:", compatibleUri);
       }
@@ -87,8 +86,6 @@ export default function NewVideoScreen() {
     title: string;
     description: string;
   }) => {
-    console.log("handleSave çağrıldı", metadata);
-
     if (!trimmedVideo) {
       Alert.alert("Hata", "Lütfen önce videoyu kırpın");
       return;
@@ -97,17 +94,15 @@ export default function NewVideoScreen() {
     try {
       setIsProcessing(true);
       setProcessingStep("Video kaydediliyor");
-      console.log("Video kaydediliyor...");
 
-      // Video süresini al
       const duration = await getVideoDuration(trimmedVideo);
 
-      // Yeni video ekle
       addVideo({
         id: generateUniqueId(),
         title: metadata.title,
         description: metadata.description,
         uri: trimmedVideo,
+        trimmedUri: trimmedVideo,
         createdAt: new Date().toISOString(),
         duration: duration,
       });
@@ -116,7 +111,6 @@ export default function NewVideoScreen() {
         {
           text: "Tamam",
           onPress: () => {
-            // Durumları sıfırla ve yeni video seçme ekranına dön
             setSelectedVideo(null);
             setTrimmedVideo(null);
           },

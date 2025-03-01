@@ -10,7 +10,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import Slider from "@react-native-community/slider";
-import { Video, AVPlaybackStatus } from "expo-av";
+import { Video, AVPlaybackStatus, ResizeMode } from "expo-av";
 import { Ionicons } from "@expo/vector-icons";
 import { useFFmpeg } from "../../hooks/useFFmpeg";
 import * as FileSystem from "expo-file-system";
@@ -30,7 +30,7 @@ export default function VideoTrimmer({
   onVideoChange,
   disabled = false,
 }: VideoTrimmerProps) {
-  const videoRef = useRef(null);
+  const videoRef = useRef<Video>(null);
   const [duration, setDuration] = useState(0);
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
@@ -42,20 +42,18 @@ export default function VideoTrimmer({
 
   const { trimVideo } = useFFmpeg();
 
-  // Video yüklendiğinde süresini al
   const handleVideoLoad = (status: AVPlaybackStatus) => {
     if (status.isLoaded) {
       const videoDuration = status.durationMillis
         ? status.durationMillis / 1000
         : 0;
       setDuration(videoDuration);
-      setEndTime(Math.min(videoDuration, startTime + 30)); // Maksimum 30 saniyelik bir aralık
+      setEndTime(Math.min(videoDuration, startTime + 30));
       setIsVideoReady(true);
       console.log("Video süresi:", videoDuration);
     }
   };
 
-  // Video oynatma pozisyonunu takip et
   const handlePlaybackStatusUpdate = (status: AVPlaybackStatus) => {
     if (status.isLoaded) {
       setCurrentTime(status.positionMillis / 1000);
@@ -107,17 +105,18 @@ export default function VideoTrimmer({
 
       console.log("Kırpılan video URI:", trimmedUri);
 
-      // Kırpılan video dosyasının varlığını kontrol et
       const fileInfo = await FileSystem.getInfoAsync(trimmedUri);
       if (!fileInfo.exists || fileInfo.size === 0) {
         throw new Error("Kırpılan video dosyası oluşturulamadı veya boş");
       }
 
       onTrimComplete(trimmedUri);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Video kırpma hatası:", error);
-      setTrimError(error.message);
-      Alert.alert("Hata", `Video kırpma hatası: ${error.message}`);
+      const errorMessage =
+        error instanceof Error ? error.message : "Bilinmeyen hata";
+      setTrimError(errorMessage);
+      Alert.alert("Hata", `Video kırpma hatası: ${errorMessage}`);
     } finally {
       setIsLoading(false);
     }
@@ -144,7 +143,6 @@ export default function VideoTrimmer({
       if (!result.canceled && result.assets && result.assets.length > 0) {
         console.log("Yeni seçilen video:", result.assets[0].uri);
 
-        // Video formatını kontrol et ve gerekirse dönüştür
         const compatibleUri = await ensureCompatibleFormat(
           result.assets[0].uri
         );
@@ -168,14 +166,12 @@ export default function VideoTrimmer({
     }
   };
 
-  // Belirli bir konuma atla
   const seekToPosition = (time: number) => {
     if (videoRef.current) {
       videoRef.current.setPositionAsync(time * 1000);
     }
   };
 
-  // Başlangıç noktasını ayarla
   const setStartPosition = () => {
     setStartTime(currentTime);
     if (currentTime >= endTime) {
@@ -183,7 +179,6 @@ export default function VideoTrimmer({
     }
   };
 
-  // Bitiş noktasını ayarla
   const setEndPosition = () => {
     setEndTime(currentTime);
     if (currentTime <= startTime) {
@@ -205,7 +200,7 @@ export default function VideoTrimmer({
           source={{ uri: sourceUri }}
           style={styles.preview}
           useNativeControls
-          resizeMode="contain"
+          resizeMode={ResizeMode.CONTAIN}
           onLoad={handleVideoLoad}
           onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
         />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,35 +6,36 @@ import {
   Pressable,
   Image,
   ActivityIndicator,
-} from 'react-native'
-import { Ionicons } from '@expo/vector-icons'
-import { Video } from '../../types'
-import { formatDuration, formatDate } from '@/utils/format'
-import { generateThumbnail } from '../../utils/video'
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { Video } from "../../types";
+import { formatDuration, formatDate } from "@/utils/format";
+import { generateThumbnail } from "../../utils/video";
 
 interface VideoListItemProps {
-  video: Video
-  onPress: () => void
+  video: Video;
+  onPress: () => void;
 }
 
 export default function VideoListItem({ video, onPress }: VideoListItemProps) {
-  const [thumbnail, setThumbnail] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [thumbnail, setThumbnail] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    loadThumbnail()
-  }, [video.uri])
+    loadThumbnail();
+  }, [video.uri]);
 
   const loadThumbnail = async () => {
     try {
-      const thumbUri = await generateThumbnail(video.uri)
-      setThumbnail(thumbUri)
+      console.log(video.uri, "video.uris");
+      const thumbUri = await generateThumbnail(video.uri);
+      setThumbnail(thumbUri);
     } catch (error) {
-      console.error('Thumbnail yükleme hatası:', error)
+      console.error("Thumbnail yükleme hatası:", error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <Pressable
@@ -44,16 +45,16 @@ export default function VideoListItem({ video, onPress }: VideoListItemProps) {
       <View style={styles.thumbnailContainer}>
         {isLoading ? (
           <View style={styles.thumbnailLoading}>
-            <ActivityIndicator size='small' color='#007AFF' />
+            <ActivityIndicator size="small" color="#007AFF" />
           </View>
         ) : (
           <Image
             source={{
               uri:
-                thumbnail || 'https://via.placeholder.com/120x120?text=Video',
+                thumbnail || "https://via.placeholder.com/120x120?text=Video",
             }}
             style={styles.thumbnail}
-            resizeMode='cover'
+            resizeMode="cover"
           />
         )}
         <View style={styles.durationBadge}>
@@ -73,12 +74,12 @@ export default function VideoListItem({ video, onPress }: VideoListItemProps) {
 
         <View style={styles.metaContainer}>
           <View style={styles.metaItem}>
-            <Ionicons name='calendar-outline' size={14} color='#6c757d' />
+            <Ionicons name="calendar-outline" size={14} color="#6c757d" />
             <Text style={styles.metaText}>{formatDate(video.createdAt)}</Text>
           </View>
 
           <View style={styles.metaItem}>
-            <Ionicons name='time-outline' size={14} color='#6c757d' />
+            <Ionicons name="time-outline" size={14} color="#6c757d" />
             <Text style={styles.metaText}>
               {formatDuration(video.duration)}
             </Text>
@@ -87,94 +88,94 @@ export default function VideoListItem({ video, onPress }: VideoListItemProps) {
       </View>
 
       <Ionicons
-        name='chevron-forward'
+        name="chevron-forward"
         size={20}
-        color='#adb5bd'
+        color="#adb5bd"
         style={styles.arrow}
       />
     </Pressable>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    backgroundColor: '#fff',
+    flexDirection: "row",
+    backgroundColor: "#fff",
     borderRadius: 12,
     marginBottom: 16,
-    overflow: 'hidden',
+    overflow: "hidden",
     elevation: 2,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
   },
   pressed: {
     opacity: 0.9,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: "#f8f9fa",
   },
   thumbnailContainer: {
     width: 120,
     height: 120,
-    position: 'relative',
-    backgroundColor: '#e9ecef',
+    position: "relative",
+    backgroundColor: "#e9ecef",
   },
   thumbnailLoading: {
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
   },
   thumbnail: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   },
   durationBadge: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 8,
     right: 8,
-    backgroundColor: 'rgba(0,0,0,0.7)',
+    backgroundColor: "rgba(0,0,0,0.7)",
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
   },
   durationText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 12,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   content: {
     flex: 1,
     padding: 12,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   title: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#212529',
+    fontWeight: "bold",
+    color: "#212529",
     marginBottom: 4,
   },
   description: {
     fontSize: 14,
-    color: '#6c757d',
+    color: "#6c757d",
     marginBottom: 8,
   },
   metaContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   metaItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginRight: 16,
   },
   metaText: {
     fontSize: 12,
-    color: '#6c757d',
+    color: "#6c757d",
     marginLeft: 4,
   },
   arrow: {
-    alignSelf: 'center',
+    alignSelf: "center",
     marginRight: 12,
   },
-})
+});
