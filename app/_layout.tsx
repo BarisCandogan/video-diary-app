@@ -11,7 +11,8 @@ import { useEffect } from "react";
 import "react-native-reanimated";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useVideoStore } from "../hooks/useVideoStore";
-
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { View } from "react-native";
 import { useColorScheme } from "@/hooks/useColorScheme";
 
 SplashScreen.preventAutoHideAsync();
@@ -40,24 +41,26 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <QueryClientProvider client={queryClient}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="video/[id]/index"
-            options={{
-              title: "Video Detayı",
-              presentation: "card",
-            }}
-          />
-          <Stack.Screen
-            name="video/[id]/edit"
-            options={{
-              title: "Video Düzenle",
-              presentation: "card",
-            }}
-          />
-        </Stack>
-        <StatusBar style="auto" />
+        <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen
+              name="video/[id]"
+              options={{
+                title: "Video Detayı",
+                presentation: "card",
+              }}
+            />
+            <Stack.Screen
+              name="video/[id]/edit"
+              options={{
+                title: "Video Düzenle",
+                presentation: "card",
+              }}
+            />
+          </Stack>
+          <StatusBar style="auto" />
+        </SafeAreaView>
       </QueryClientProvider>
     </ThemeProvider>
   );

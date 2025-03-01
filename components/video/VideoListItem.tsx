@@ -6,11 +6,13 @@ import {
   Pressable,
   Image,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Video } from "../../types";
 import { formatDuration, formatDate } from "@/utils/format";
 import { generateThumbnail } from "../../utils/video";
+import { useVideoStore } from "../../hooks/useVideoStore";
 
 interface VideoListItemProps {
   video: Video;
@@ -20,6 +22,7 @@ interface VideoListItemProps {
 export default function VideoListItem({ video, onPress }: VideoListItemProps) {
   const [thumbnail, setThumbnail] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { deleteVideo } = useVideoStore();
 
   useEffect(() => {
     loadThumbnail();
@@ -27,7 +30,6 @@ export default function VideoListItem({ video, onPress }: VideoListItemProps) {
 
   const loadThumbnail = async () => {
     try {
-      console.log(video.uri, "video.uris");
       const thumbUri = await generateThumbnail(video.uri);
       setThumbnail(thumbUri);
     } catch (error) {
@@ -35,6 +37,21 @@ export default function VideoListItem({ video, onPress }: VideoListItemProps) {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleDelete = () => {
+    Alert.alert(
+      "Videoyu Sil",
+      "Bu videoyu silmek istediğinizden emin misiniz?",
+      [
+        { text: "İptal", style: "cancel" },
+        {
+          text: "Sil",
+          style: "destructive",
+          onPress: () => deleteVideo(video.id),
+        },
+      ]
+    );
   };
 
   return (
@@ -87,12 +104,9 @@ export default function VideoListItem({ video, onPress }: VideoListItemProps) {
         </View>
       </View>
 
-      <Ionicons
-        name="chevron-forward"
-        size={20}
-        color="#adb5bd"
-        style={styles.arrow}
-      />
+      <Pressable style={styles.deleteButton} onPress={handleDelete} hitSlop={8}>
+        <Ionicons name="trash-outline" size={20} color="#dc3545" />
+      </Pressable>
     </Pressable>
   );
 }
@@ -177,5 +191,9 @@ const styles = StyleSheet.create({
   arrow: {
     alignSelf: "center",
     marginRight: 12,
+  },
+  deleteButton: {
+    padding: 8,
+    marginRight: 4,
   },
 });

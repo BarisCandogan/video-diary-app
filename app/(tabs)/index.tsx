@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,78 +8,100 @@ import {
   ActivityIndicator,
   RefreshControl,
   SafeAreaView,
-} from 'react-native'
-import { Link, router } from 'expo-router'
-import { useVideoStore } from '../../hooks/useVideoStore'
-import VideoListItem from '../../components/video/VideoListItem'
-import { Ionicons } from '@expo/vector-icons'
-import { Video } from '../../types'
+  Alert,
+} from "react-native";
+import { Link, router } from "expo-router";
+import { useVideoStore } from "../../hooks/useVideoStore";
+import VideoListItem from "../../components/video/VideoListItem";
+import { Ionicons } from "@expo/vector-icons";
+import { Video } from "../../types";
 
 export default function HomeScreen() {
-  const { videos, loadVideos } = useVideoStore()
-  const [isLoading, setIsLoading] = useState(true)
-  const [refreshing, setRefreshing] = useState(false)
+  const { videos, loadVideos, deleteAllVideos } = useVideoStore();
+  const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    loadData()
-  }, [])
+    loadData();
+  }, []);
 
   const loadData = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      await loadVideos()
+      await loadVideos();
     } catch (error) {
-      console.error('Video yükleme hatası:', error)
+      console.error("Video yükleme hatası:", error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleRefresh = async () => {
-    setRefreshing(true)
+    setRefreshing(true);
     try {
-      await loadVideos()
+      await loadVideos();
     } catch (error) {
-      console.error('Video yenileme hatası:', error)
+      console.error("Video yenileme hatası:", error);
     } finally {
-      setRefreshing(false)
+      setRefreshing(false);
     }
-  }
+  };
 
   const handleVideoPress = (video: Video) => {
-    console.log(`Video ID: ${video.id} için detay sayfasına yönlendiriliyor`)
+    console.log(`Video ID: ${video.id} için detay sayfasına yönlendiriliyor`);
     router.push({
-      pathname: '/video/[id]',
+      pathname: "/video/[id]",
       params: { id: video.id },
-    })
-  }
+    });
+  };
+
+  const handleDeleteAll = () => {
+    Alert.alert(
+      "Tüm Videoları Sil",
+      "Tüm videoları silmek istediğinizden emin misiniz?",
+      [
+        { text: "İptal", style: "cancel" },
+        {
+          text: "Tümünü Sil",
+          style: "destructive",
+          onPress: deleteAllVideos,
+        },
+      ]
+    );
+  };
 
   const renderEmptyList = () => (
     <View style={styles.emptyContainer}>
-      <Ionicons name='videocam-outline' size={64} color='#adb5bd' />
+      <Ionicons name="videocam-outline" size={64} color="#adb5bd" />
       <Text style={styles.emptyText}>Henüz video yok</Text>
       <Text style={styles.emptySubtext}>
         Yeni bir video eklemek için sağ alt köşedeki butona tıklayın
       </Text>
       <Pressable
         style={styles.emptyButton}
-        onPress={() => router.push('/(tabs)/new-video')}
+        onPress={() => router.push("/(tabs)/new-video")}
       >
-        <Ionicons name='add-circle' size={20} color='#fff' />
+        <Ionicons name="add-circle" size={20} color="#fff" />
         <Text style={styles.emptyButtonText}>Yeni Video Ekle</Text>
       </Pressable>
     </View>
-  )
+  );
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Videolarım</Text>
+        {videos.length > 0 && (
+          <Pressable style={styles.deleteAllButton} onPress={handleDeleteAll}>
+            <Ionicons name="trash-outline" size={20} color="#dc3545" />
+            <Text style={styles.deleteAllText}>Tümünü Sil</Text>
+          </Pressable>
+        )}
       </View>
 
       {isLoading ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size='large' color='#007AFF' />
+          <ActivityIndicator size="large" color="#007AFF" />
           <Text style={styles.loadingText}>Videolar yükleniyor...</Text>
         </View>
       ) : (
@@ -98,39 +120,48 @@ export default function HomeScreen() {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={handleRefresh}
-              colors={['#007AFF']}
-              tintColor='#007AFF'
+              colors={["#007AFF"]}
+              tintColor="#007AFF"
             />
           }
         />
       )}
 
-      <Link href='/(tabs)/new-video' asChild>
+      <Link href="/(tabs)/new-video" asChild>
         <Pressable style={styles.fab}>
-          <Ionicons name='add' size={24} color='#fff' />
+          <Ionicons name="add" size={24} color="#fff" />
         </Pressable>
       </Link>
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: "#ffff",
   },
   header: {
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
   headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#212529',
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#212529",
+  },
+  deleteAllButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 8,
+  },
+  deleteAllText: {
+    color: "#dc3545",
+    marginLeft: 4,
+    fontSize: 16,
   },
   listContent: {
     padding: 16,
@@ -138,68 +169,68 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   loadingText: {
     marginTop: 12,
     fontSize: 16,
-    color: '#6c757d',
+    color: "#6c757d",
   },
   emptyContainer: {
     padding: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fff',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#fff",
     borderRadius: 12,
     marginVertical: 16,
-    elevation: 2,
-    shadowColor: '#000',
+    elevation: 6,
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.5,
     shadowRadius: 2,
   },
   emptyText: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#343a40',
+    fontWeight: "bold",
+    color: "#343a40",
     marginTop: 16,
     marginBottom: 8,
   },
   emptySubtext: {
     fontSize: 14,
-    color: '#6c757d',
-    textAlign: 'center',
+    color: "#6c757d",
+    textAlign: "center",
     marginBottom: 24,
     lineHeight: 20,
   },
   emptyButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: "#007AFF",
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   emptyButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
     marginLeft: 8,
   },
   fab: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 24,
     right: 24,
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#007AFF',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#007AFF",
+    justifyContent: "center",
+    alignItems: "center",
     elevation: 4,
-    shadowColor: '#007AFF',
+    shadowColor: "#007AFF",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
   },
-})
+});

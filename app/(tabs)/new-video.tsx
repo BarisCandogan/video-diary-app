@@ -225,7 +225,7 @@ export default function NewVideoScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f8f9fa",
+    backgroundColor: "#ffff",
   },
   container: {
     flex: 1,
@@ -242,9 +242,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
-    textAlign: "center",
     color: "#212529",
   },
   pickVideoContainer: {
@@ -255,10 +254,10 @@ const styles = StyleSheet.create({
     margin: 16,
     borderRadius: 12,
     minHeight: 220,
-    elevation: 2,
+    elevation: 6,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.5,
     shadowRadius: 2,
   },
   videoIcon: {

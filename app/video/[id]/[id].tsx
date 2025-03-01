@@ -92,17 +92,6 @@ export default function VideoDetailScreen() {
     );
   };
 
-  if (isLoading) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#007AFF" />
-          <Text style={styles.loadingText}>Video yükleniyor...</Text>
-        </View>
-      </SafeAreaView>
-    );
-  }
-
   if (error || !video) {
     return (
       <SafeAreaView style={styles.container}>

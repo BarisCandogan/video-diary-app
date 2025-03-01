@@ -204,13 +204,6 @@ export default function VideoTrimmer({
           onLoad={handleVideoLoad}
           onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
         />
-
-        {!isVideoReady && (
-          <View style={styles.loadingOverlay}>
-            <ActivityIndicator size="large" color="#007AFF" />
-            <Text style={styles.loadingText}>Video yükleniyor...</Text>
-          </View>
-        )}
       </View>
 
       <View style={styles.changeVideoContainer}>
