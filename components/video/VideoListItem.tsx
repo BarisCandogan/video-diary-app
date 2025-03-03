@@ -13,6 +13,7 @@ import { Video } from "../../types";
 import { formatDuration, formatDate } from "@/utils/format";
 import { generateThumbnail } from "../../utils/video";
 import { useVideoStore } from "../../hooks/useVideoStore";
+import { Colors } from "../../utils/Colors";
 
 interface VideoListItemProps {
   video: Video;
@@ -62,7 +63,7 @@ export default function VideoListItem({ video, onPress }: VideoListItemProps) {
       <View style={styles.thumbnailContainer}>
         {isLoading ? (
           <View style={styles.thumbnailLoading}>
-            <ActivityIndicator size="small" color="#007AFF" />
+            <ActivityIndicator size="small" color={Colors.primary} />
           </View>
         ) : (
           <Image
@@ -91,7 +92,11 @@ export default function VideoListItem({ video, onPress }: VideoListItemProps) {
 
         <View style={styles.metaContainer}>
           <View style={styles.metaItem}>
-            <Ionicons name="calendar-outline" size={14} color="#6c757d" />
+            <Ionicons
+              name="calendar-outline"
+              size={14}
+              color={Colors.primary}
+            />
             <Text style={styles.metaText}>{formatDate(video.createdAt)}</Text>
           </View>
 
@@ -105,7 +110,7 @@ export default function VideoListItem({ video, onPress }: VideoListItemProps) {
       </View>
 
       <Pressable style={styles.deleteButton} onPress={handleDelete} hitSlop={8}>
-        <Ionicons name="trash-outline" size={20} color="#dc3545" />
+        <Ionicons name="trash-outline" size={20} color={Colors.error} />
       </Pressable>
     </Pressable>
   );

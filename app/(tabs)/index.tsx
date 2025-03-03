@@ -15,6 +15,8 @@ import { useVideoStore } from "../../hooks/useVideoStore";
 import VideoListItem from "../../components/video/VideoListItem";
 import { Ionicons } from "@expo/vector-icons";
 import { Video } from "../../types";
+import Header from "../../components/Header";
+import { Colors } from "../../utils/Colors";
 
 export default function HomeScreen() {
   const { videos, loadVideos, deleteAllVideos } = useVideoStore();
@@ -89,19 +91,15 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Videolarım</Text>
-        {videos.length > 0 && (
-          <Pressable style={styles.deleteAllButton} onPress={handleDeleteAll}>
-            <Ionicons name="trash-outline" size={20} color="#dc3545" />
-            <Text style={styles.deleteAllText}>Tümünü Sil</Text>
-          </Pressable>
-        )}
-      </View>
+      <Header
+        title="Videolarım"
+        showDeleteButton={videos.length > 0}
+        onDeleteAll={handleDeleteAll}
+      />
 
       {isLoading ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#007AFF" />
+          <ActivityIndicator size="large" color={Colors.primary} />
           <Text style={styles.loadingText}>Videolar yükleniyor...</Text>
         </View>
       ) : (
@@ -120,8 +118,8 @@ export default function HomeScreen() {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={handleRefresh}
-              colors={["#007AFF"]}
-              tintColor="#007AFF"
+              colors={[Colors.primary]}
+              tintColor={Colors.primary}
             />
           }
         />
@@ -159,7 +157,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   deleteAllText: {
-    color: "#dc3545",
+    color: Colors.error,
     marginLeft: 4,
     fontSize: 16,
   },
@@ -183,7 +181,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#fff",
     borderRadius: 12,
-    marginVertical: 16,
     elevation: 6,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
@@ -205,7 +202,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   emptyButton: {
-    backgroundColor: "#007AFF",
+    backgroundColor: Colors.primary,
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,
@@ -224,11 +221,11 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: "#007AFF",
+    backgroundColor: Colors.primary,
     justifyContent: "center",
     alignItems: "center",
     elevation: 4,
-    shadowColor: "#007AFF",
+    shadowColor: Colors.primary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,

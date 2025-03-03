@@ -16,6 +16,8 @@ import { useFFmpeg } from "../../hooks/useFFmpeg";
 import * as FileSystem from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
 import { ensureCompatibleFormat } from "../../utils/ffmpeg";
+import ChangeVideoButton from "../../components/ChangeVideoButton";
+import { Colors } from "../../utils/Colors";
 
 interface VideoTrimmerProps {
   sourceUri: string;
@@ -207,23 +209,11 @@ export default function VideoTrimmer({
       </View>
 
       <View style={styles.changeVideoContainer}>
-        <Pressable
-          style={styles.changeVideoButton}
+        <ChangeVideoButton
           onPress={handleChangeVideo}
-          disabled={isChangingVideo || isLoading}
-        >
-          {isChangingVideo ? (
-            <View style={styles.buttonContent}>
-              <ActivityIndicator size="small" color="#fff" />
-              <Text style={styles.buttonText}>Değiştiriliyor...</Text>
-            </View>
-          ) : (
-            <View style={styles.buttonContent}>
-              <Ionicons name="videocam" size={20} color="#fff" />
-              <Text style={styles.buttonText}>Farklı Video Seç</Text>
-            </View>
-          )}
-        </Pressable>
+          isLoading={isLoading}
+          isChangingVideo={isChangingVideo}
+        />
       </View>
 
       {isVideoReady && (
@@ -252,9 +242,9 @@ export default function VideoTrimmer({
               value={currentTime}
               onValueChange={(value) => seekToPosition(value)}
               disabled={disabled || isLoading}
-              minimumTrackTintColor="#007AFF"
+              minimumTrackTintColor={Colors.primary}
               maximumTrackTintColor="#DDDDDD"
-              thumbTintColor="#007AFF"
+              thumbTintColor={Colors.primary}
             />
             <View style={styles.timeMarkersContainer}>
               <Text style={styles.timeMarker}>0:00</Text>
@@ -284,7 +274,7 @@ export default function VideoTrimmer({
 
           {trimError && (
             <View style={styles.errorContainer}>
-              <Ionicons name="alert-circle" size={20} color="#FF3B30" />
+              <Ionicons name="alert-circle" size={20} color={Colors.error} />
               <Text style={styles.errorText}>{trimError}</Text>
             </View>
           )}
@@ -355,25 +345,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
-  changeVideoButton: {
-    backgroundColor: "#6c757d",
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "row",
-  },
   trimmerContainer: {
     padding: 16,
     backgroundColor: "#fff",
     borderRadius: 12,
     marginHorizontal: 16,
     marginBottom: 16,
-    elevation: 2,
+    elevation: 1,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.5,
     shadowRadius: 2,
   },
   timeInfoContainer: {
@@ -395,7 +376,7 @@ const styles = StyleSheet.create({
   },
   durationText: {
     fontSize: 14,
-    color: "#007AFF",
+    color: Colors.primary,
     marginTop: 4,
   },
   currentTimeContainer: {
@@ -440,7 +421,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#28a745",
   },
   endMarker: {
-    backgroundColor: "#dc3545",
+    backgroundColor: Colors.error,
   },
   markerButtonText: {
     color: "white",
@@ -456,13 +437,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   errorText: {
-    color: "#FF3B30",
+    color: Colors.error,
     fontSize: 14,
     marginLeft: 8,
     flex: 1,
   },
   trimButton: {
-    backgroundColor: "#007AFF",
+    backgroundColor: Colors.primary,
     padding: 16,
     borderRadius: 8,
     alignItems: "center",
@@ -479,12 +460,6 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     fontSize: 16,
-    marginLeft: 8,
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "600",
-    fontSize: 15,
     marginLeft: 8,
   },
 });

@@ -2,38 +2,10 @@ import React from "react";
 import { View, Text, StyleSheet, Pressable, Alert } from "react-native";
 import { useVideoStore } from "../../hooks/useVideoStore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Colors } from "../../utils/Colors";
 
 export default function SettingsScreen() {
   const { videos } = useVideoStore();
-
-  const clearAllData = async () => {
-    Alert.alert(
-      "Tüm Verileri Sil",
-      "Tüm videolar ve ayarlar silinecek. Bu işlem geri alınamaz.",
-      [
-        {
-          text: "İptal",
-          style: "cancel",
-        },
-        {
-          text: "Sil",
-          style: "destructive",
-          onPress: async () => {
-            try {
-              await AsyncStorage.clear();
-              // Uygulama yeniden başlatılmalı
-              Alert.alert(
-                "Başarılı",
-                "Tüm veriler silindi. Uygulamayı yeniden başlatın."
-              );
-            } catch (error) {
-              Alert.alert("Hata", "Veriler silinirken bir hata oluştu");
-            }
-          },
-        },
-      ]
-    );
-  };
 
   return (
     <View style={styles.container}>
@@ -63,7 +35,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     textAlign: "center",
     fontSize: 40,
-    color: "#007AFF",
+    color: Colors.primary,
     fontWeight: "bold",
     marginBottom: 12,
   },
@@ -80,7 +52,7 @@ const styles = StyleSheet.create({
     color: "#666",
   },
   dangerButton: {
-    backgroundColor: "#FF3B30",
+    backgroundColor: Colors.error,
     padding: 16,
     borderRadius: 8,
     alignItems: "center",

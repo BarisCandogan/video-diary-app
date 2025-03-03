@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { Colors } from "@/utils/Colors";
 
 interface VideoMetadataFormProps {
   onSubmit: (data: { title: string; description: string }) => void;
@@ -142,14 +143,14 @@ const styles = StyleSheet.create({
     color: "#212529",
   },
   inputError: {
-    borderColor: "#dc3545",
+    borderColor: Colors.error,
   },
   textArea: {
     minHeight: 100,
     textAlignVertical: "top",
   },
   errorText: {
-    color: "#dc3545",
+    color: Colors.error,
     fontSize: 14,
     marginTop: 4,
   },
@@ -160,14 +161,14 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   submitButton: {
-    backgroundColor: "#007AFF",
+    backgroundColor: Colors.primary,
     paddingVertical: 14,
     paddingHorizontal: 20,
     borderRadius: 8,
     alignItems: "center",
     marginTop: 10,
     elevation: 2,
-    shadowColor: "#007AFF",
+    shadowColor: Colors.primary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 3,

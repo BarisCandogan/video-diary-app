@@ -18,6 +18,9 @@ import { generateUniqueId } from "../../utils/helpers";
 import { getVideoDuration, ensureCompatibleFormat } from "../../utils/ffmpeg";
 import VideoPlayer from "../../components/video/VideoPlayer";
 import { Ionicons } from "@expo/vector-icons";
+import Header from "../../components/Header";
+import ChangeVideoButton from "../../components/ChangeVideoButton";
+import { Colors } from "@/utils/Colors";
 
 export default function NewVideoScreen() {
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
@@ -125,22 +128,24 @@ export default function NewVideoScreen() {
     }
   };
 
+  const handleChangeVideo = async () => {
+    await pickVideo();
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
       >
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>Yeni Video</Text>
-        </View>
+        <Header title="Yeni Video" />
 
         {!selectedVideo ? (
           <View style={styles.pickVideoContainer}>
             <Ionicons
               name="videocam"
-              size={48}
-              color="#007AFF"
+              size={64}
+              color={Colors.primary}
               style={styles.videoIcon}
             />
             <Text style={styles.instructionText}>
@@ -194,6 +199,11 @@ export default function NewVideoScreen() {
                   />
                 </View>
 
+                <ChangeVideoButton
+                  onPress={handleChangeVideo}
+                  isLoading={isProcessing}
+                />
+
                 <View style={styles.formContainer}>
                   <Text style={styles.sectionTitle}>Video Bilgileri</Text>
                   <Text style={styles.sectionDescription}>
@@ -211,7 +221,7 @@ export default function NewVideoScreen() {
 
         {isProcessing && (
           <View style={styles.processingOverlay}>
-            <ActivityIndicator size="large" color="#fff" />
+            <ActivityIndicator size="large" color={Colors.primary} />
             <Text style={styles.processingText}>
               {processingStep || "İşleniyor..."}
             </Text>
@@ -271,12 +281,12 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   pickButton: {
-    backgroundColor: "#007AFF",
+    backgroundColor: Colors.primary,
     paddingVertical: 14,
     paddingHorizontal: 28,
     borderRadius: 10,
     elevation: 2,
-    shadowColor: "#007AFF",
+    shadowColor: Colors.primary,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 3,

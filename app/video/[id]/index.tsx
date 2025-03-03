@@ -12,6 +12,7 @@ import { useVideoStore } from "../../../hooks/useVideoStore";
 import VideoPlayer from "../../../components/video/VideoPlayer";
 import { Ionicons } from "@expo/vector-icons";
 import * as FileSystem from "expo-file-system";
+import { Colors } from "../../../utils/Colors";
 
 export default function VideoDetailScreen() {
   const { id } = useLocalSearchParams();
@@ -55,7 +56,7 @@ export default function VideoDetailScreen() {
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#007AFF" />
+        <ActivityIndicator size="large" color={Colors.primary} />
         <Text style={styles.loadingText}>Yükleniyor...</Text>
       </View>
     );
@@ -64,7 +65,7 @@ export default function VideoDetailScreen() {
   if (!video) {
     return (
       <View style={styles.errorContainer}>
-        <Ionicons name="alert-circle" size={64} color="#FF3B30" />
+        <Ionicons name="alert-circle" size={64} color={Colors.error} />
         <Text style={styles.errorTitle}>Video Bulunamadı</Text>
         <Text style={styles.errorText}>
           Bu video silinmiş veya mevcut değil.
@@ -80,7 +81,7 @@ export default function VideoDetailScreen() {
     <ScrollView style={styles.container}>
       {!videoExists ? (
         <View style={styles.videoErrorContainer}>
-          <Ionicons name="videocam-off" size={48} color="#FF3B30" />
+          <Ionicons name="videocam-off" size={48} color={Colors.error} />
           <Text style={styles.videoErrorText}>
             Video dosyası bulunamadı. Dosya silinmiş veya taşınmış olabilir.
           </Text>
@@ -141,7 +142,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   backButton: {
-    backgroundColor: "#007AFF",
+    backgroundColor: Colors.primary,
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
@@ -185,7 +186,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   actionButton: {
-    backgroundColor: "#007AFF",
+    backgroundColor: Colors.primary,
     paddingHorizontal: 50,
     paddingVertical: 18,
     borderRadius: 8,
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   deleteButton: {
-    backgroundColor: "#FF3B30",
+    backgroundColor: Colors.error,
   },
   actionButtonText: {
     color: "white",

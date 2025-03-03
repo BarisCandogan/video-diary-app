@@ -17,6 +17,7 @@ import { formatDate, formatDuration } from "../../../utils/format";
 import * as FileSystem from "expo-file-system";
 import { Video } from "../../../types/video";
 import { Video as ExpoVideo, ResizeMode } from "expo-av";
+import { Colors } from "../../../utils/Colors";
 
 export default function VideoDetailScreen() {
   const { id } = useLocalSearchParams();
@@ -96,7 +97,7 @@ export default function VideoDetailScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.errorContainer}>
-          <Ionicons name="alert-circle" size={64} color="#dc3545" />
+          <Ionicons name="alert-circle" size={64} color={Colors.error} />
           <Text style={styles.errorTitle}>Hata</Text>
           <Text style={styles.errorText}>
             {error || "Bilinmeyen bir hata oluştu"}
@@ -121,7 +122,7 @@ export default function VideoDetailScreen() {
             Video Detayı
           </Text>
           <Pressable style={styles.deleteIcon} onPress={handleDelete}>
-            <Ionicons name="trash-outline" size={24} color="#dc3545" />
+            <Ionicons name="trash-outline" size={24} color={Colors.error} />
           </Pressable>
         </View>
 
@@ -264,7 +265,7 @@ const styles = StyleSheet.create({
   errorTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#dc3545",
+    color: Colors.error,
     marginTop: 16,
     marginBottom: 8,
   },
@@ -275,7 +276,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   backButton: {
-    backgroundColor: "#007AFF",
+    backgroundColor: Colors.primary,
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,
