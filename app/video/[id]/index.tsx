@@ -79,6 +79,13 @@ export default function VideoDetailScreen() {
 
   return (
     <ScrollView style={styles.container}>
+      <Ionicons
+        name="arrow-back"
+        size={30}
+        color={Colors.primary}
+        style={{ margin: 10 }}
+        onPress={() => router.back()}
+      />
       {!videoExists ? (
         <View style={styles.videoErrorContainer}>
           <Ionicons name="videocam-off" size={48} color={Colors.error} />
@@ -141,12 +148,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 24,
   },
-  backButton: {
-    backgroundColor: Colors.primary,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-  },
+
   backButtonText: {
     color: "white",
     fontWeight: "bold",
@@ -175,6 +177,12 @@ const styles = StyleSheet.create({
   date: {
     color: "#666",
     marginBottom: 16,
+  },
+  backButton: {
+    backgroundColor: Colors.primary,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
   },
   description: {
     fontSize: 16,
